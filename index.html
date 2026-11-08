@@ -66,42 +66,62 @@
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.35));
+      background: linear-gradient(to top, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0) 55%);
     }
+
+    .slides::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0) 75%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .form-open .slides::before { opacity: 1; }
 
     /* ---------- content ---------- */
     main {
-      position: relative;
+      position: fixed;
       z-index: 1;
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 16px 72px;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 460px;
+      padding: 0 16px 56px 40px;
     }
 
     h1 {
-      margin: 0 0 36px;
+      margin: 0 0 16px;
       font-weight: 800;
-      font-size: clamp(2.4rem, 8.5vw, 7rem);
-      line-height: 0.95;
-      letter-spacing: -0.035em;
-      text-align: center;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.25), 0 4px 40px rgba(0,0,0,0.45);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 2px 24px rgba(0,0,0,0.35);
     }
 
-    h1 .domain { display: block; }
     h1 .sale { color: var(--accent); }
 
+    .reveal {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s ease, opacity 0.35s ease;
+      opacity: 0;
+    }
+
+    .reveal > div { overflow: hidden; }
+
+    .open .reveal {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
     form {
-      width: 100%;
-      max-width: 520px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 6px;
+      padding-bottom: 6px;
     }
 
     .full { grid-column: 1 / -1; }
@@ -122,63 +142,64 @@
       color: var(--ink);
       font: inherit;
       font-size: 16px;
-      padding: 14px 16px;
+      padding: 10px 12px;
       outline: none;
       transition: box-shadow 0.2s ease, background 0.2s ease;
     }
 
     textarea {
       resize: vertical;
-      min-height: 96px;
+      min-height: 72px;
     }
 
     input::placeholder, textarea::placeholder { color: #6b6b6b; }
 
     input:focus, textarea:focus {
       background: #ffffff;
-      box-shadow: 0 0 0 3px var(--accent);
+      box-shadow: inset 0 0 0 2px var(--accent);
     }
 
-    button {
-      grid-column: 1 / -1;
+    .cta {
+      display: inline-block;
       border: 0;
       border-radius: 0;
       background: var(--accent);
       color: var(--ink);
       font: inherit;
       font-weight: 700;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      padding: 16px;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      padding: 11px 20px;
       cursor: pointer;
       transition: transform 0.15s ease, filter 0.2s ease;
     }
 
-    button:hover { filter: brightness(1.06); }
-    button:active { transform: translateY(1px); }
-    button:disabled { opacity: 0.6; cursor: progress; }
-    button:focus-visible { outline: 3px solid var(--paper); outline-offset: 2px; }
+    .cta:hover { filter: brightness(1.06); }
+    .cta:active { transform: translateY(1px); }
+    .cta:disabled { opacity: 0.6; cursor: progress; }
+    .cta:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+    form .cta { grid-column: 1 / -1; width: 100%; }
+    .open #open { display: none; }
 
     .hp { display: none !important; }
 
     .status {
       grid-column: 1 / -1;
-      min-height: 1.4em;
-      margin: 4px 0 0;
-      font-size: 15px;
+      margin: 2px 0 0;
+      font-size: 14px;
       color: var(--muted);
-      text-align: center;
     }
 
-    .status.ok { color: var(--paper); }
+    .status:empty { display: none; }
     .status.err { color: #ffb4a8; }
 
     .thanks {
       display: none;
-      max-width: 520px;
-      text-align: center;
-      font-size: 1.15rem;
+      margin: 0;
+      font-size: 1rem;
       line-height: 1.5;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.5);
     }
 
     .thanks strong { color: var(--accent); }
@@ -187,27 +208,34 @@
     .dots {
       position: fixed;
       z-index: 2;
-      left: 0; right: 0;
-      bottom: 22px;
+      right: 40px;
+      bottom: 60px;
       display: flex;
-      justify-content: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .dots button {
-      grid-column: auto;
-      width: 28px;
+      width: 22px;
       height: 3px;
       padding: 0;
+      border: 0;
       background: var(--line);
+      cursor: pointer;
       transition: background 0.3s ease;
     }
 
     .dots button[aria-current="true"] { background: var(--paper); }
 
-    @media (max-width: 520px) {
+    @media (max-width: 600px) {
+      .slides::after {
+        background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.5) 35%, rgba(0,0,0,0) 65%);
+      }
+      main { padding: 0 16px 48px; max-width: none; }
+      .dots { right: auto; left: 16px; bottom: 22px; }
+    }
+
+    @media (max-width: 380px) {
       form { grid-template-columns: 1fr; }
-      h1 { margin-bottom: 28px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -225,34 +253,39 @@
     <div class="slide" data-src="img/cube-museum.jpg"></div>
   </div>
 
-  <main>
-    <h1><span class="domain">cube.amsterdam</span> is <span class="sale">for sale</span></h1>
+  <main id="panel">
+    <h1>cube.amsterdam<br>is <span class="sale">for sale</span></h1>
 
-    <form id="interest" novalidate>
+    <button class="cta" id="open" type="button" aria-expanded="false" aria-controls="reveal">I'm interested</button>
+
+    <div class="reveal" id="reveal">
       <div>
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" placeholder="Name" autocomplete="name" required>
+        <form id="interest" novalidate>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Name" autocomplete="name" required tabindex="-1">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" required tabindex="-1">
+          </div>
+          <div class="full">
+            <label for="company">Company (optional)</label>
+            <input id="company" name="company" type="text" placeholder="Company (optional)" autocomplete="organization" tabindex="-1">
+          </div>
+          <div class="full">
+            <label for="message">Message or offer</label>
+            <textarea id="message" name="message" placeholder="Your message or offer (optional)" tabindex="-1"></textarea>
+          </div>
+          <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off">
+          <button class="cta" type="submit" tabindex="-1">Send</button>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </form>
       </div>
-      <div>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" required>
-      </div>
-      <div class="full">
-        <label for="company">Company (optional)</label>
-        <input id="company" name="company" type="text" placeholder="Company (optional)" autocomplete="organization">
-      </div>
-      <div class="full">
-        <label for="message">Message or offer</label>
-        <textarea id="message" name="message" placeholder="Your message or offer (optional)"></textarea>
-      </div>
-      <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off">
-      <button type="submit">I'm interested</button>
-      <p class="status" id="status" role="status" aria-live="polite"></p>
-    </form>
+    </div>
 
     <p class="thanks" id="thanks" role="status" aria-live="polite">
-      <strong>Thank you.</strong><br>
-      We received your interest in cube.amsterdam and will get back to you soon.
+      <strong>Thank you.</strong> We received your interest and will get back to you soon.
     </p>
   </main>
 
@@ -308,7 +341,19 @@
       var KEY = atob('Y3ViZUBzeW5lcmdpcXVlLm5s');
       var ENDPOINT = 'https://formsubmit.co/ajax/' + KEY;
 
+      var panel = document.getElementById('panel');
+      var openBtn = document.getElementById('open');
       var form = document.getElementById('interest');
+      openBtn.addEventListener('click', function () {
+        panel.classList.add('open');
+        document.body.classList.add('form-open');
+        openBtn.setAttribute('aria-expanded', 'true');
+        Array.prototype.forEach.call(form.querySelectorAll('input:not(.hp), textarea, button'), function (el) {
+          el.removeAttribute('tabindex');
+        });
+        setTimeout(function () { form.elements['name'].focus(); }, 250);
+      });
+
       var status = document.getElementById('status');
       var thanks = document.getElementById('thanks');
       var btn = form.querySelector('button[type=submit]');
@@ -317,14 +362,14 @@
         e.preventDefault();
         status.className = 'status';
 
-        var name = form.name.value.trim();
-        var email = form.email.value.trim();
+        var name = form.elements['name'].value.trim();
+        var email = form.elements['email'].value.trim();
         if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           status.textContent = 'Please fill in your name and a valid email address.';
           status.classList.add('err');
           return;
         }
-        if (form._honey.value) return;
+        if (form.elements['_honey'].value) return;
 
         btn.disabled = true;
         status.textContent = 'Sending...';
@@ -335,8 +380,8 @@
           body: JSON.stringify({
             name: name,
             email: email,
-            company: form.company.value.trim(),
-            message: form.message.value.trim(),
+            company: form.elements['company'].value.trim(),
+            message: form.elements['message'].value.trim(),
             _subject: 'Interest in cube.amsterdam',
             _replyto: email,
             _template: 'table'
@@ -345,7 +390,7 @@
           .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (res) {
             if (!res.ok || String(res.d.success) !== 'true') throw new Error('send');
-            form.style.display = 'none';
+            document.getElementById('reveal').style.display = 'none';
             thanks.style.display = 'block';
           })
           .catch(function () {
